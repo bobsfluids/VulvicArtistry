@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FRINGE | Feminist Abstract Avant-Garde Art</title>
+  <style>
+    :root {
+      --primary: #ff3b6c;
+      --secondary: #6c0d44;
+      --dark: #2a2a2a;
+      --light: #f9f9f9;
+      --accent: #36dd9c;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    
+    body {
+      background-color: var(--light);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+    
+    header {
+      padding: 1rem 5%;
+      background-color: white;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--primary);
+      text-decoration: none;
+    }
+    
+    .nav-links {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-links li {
+      margin-left: 2rem;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--dark);
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--primary);
+    }
+    
+    .cart-icon {
+      position: relative;
+      cursor: pointer;
+    }
+    
+    .cart-count {
+      position: absolute;
+      top: -10px;
+      right: -10px;
+      background-color: var(--accent);
+      color: white;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+    
+    .hero {
+      height: 60vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: linear-gradient(45deg, var(--secondary), var(--primary));
+      color: white;
+      padding: 0 5%;
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      margin-bottom: 1rem;
+      max-width: 800px;
+    }
+    
+    .hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin-bottom: 2rem;
+    }
+    
+    .btn {
+      padding: 0.8rem 2rem;
+      background-color: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    
+    .btn:hover {
+      background-color: #2bc589;
+      transform: translateY(-2px);
+    }
+    
+    main {
+      padding: 4rem 5%;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 3rem;
+      text-align: center;
+      position: relative;
+    }
+    
+    .section-title::after {
+      content: '';
+      position: absolute;
+      bottom: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 5px;
+      background-color: var(--primary);
+    }
+    
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    
+    .art-item {
+      background-color: white;
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+      transition: transform 0.3s;
+    }
+    
+    .art-item:hover {
+      transform: translateY(-10px);
+    }
+    
+    .art-img {
+      height: 300px;
+      background-position: center;
+      background-size: cover;
+    }
+    
+    .art-info {
+      padding: 1.5rem;
+    }
+    
+    .art-title {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .artist {
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    
+    .price {
+      font-weight: 700;
+      color: var(--secondary);
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .add-to-cart {
+      width: 100%;
+      padding: 0.7rem;
+      background-color: var(--primary);
+    }
+    
+    .about {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      margin: 5rem 0;
+    }
+    
+    .about-img {
+      height: 400px;
+      background-color: #ddd;
+      border-radius: 10px;
+      background-position: center;
+      background-size: cover;
+      background-image: url('/api/placeholder/600/400');
+    }
+    
+    .about-text h2 {
+      font-size: 2rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .about-text p {
+      margin-bottom: 1rem;
+    }
+    
+    .cart-modal {
+      position: fixed;
+      top: 0;
+      right: -400px;
+      width: 400px;
+      height: 100vh;
+      background-color: white;
+      box-shadow: -5px 0 15px rgba(0,0,0,0.1);
+      padding: 2rem;
+      overflow-y: auto;
+      transition: right 0.3s;
+      z-index: 1000;
+    }
+    
+    .cart-modal.open {
+      right: 0;
+    }
+    
+    .close-cart {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+    }
+    
+    .cart-items {
+      margin: 2rem 0;
+    }
+    
+    .cart-item {
+      display: flex;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .cart-item-img {
+      width: 80px;
+      height: 80px;
+      background-position: center;
+      background-size: cover;
+      border-radius: 5px;
+      margin-right: 1rem;
+    }
+    
+    .cart-item-info {
+      flex: 1;
+    }
+    
+    .cart-item-title {
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+    
+    .cart-item-price {
+      color: var(--secondary);
+      font-weight: 700;
+    }
+    
+    .remove-item {
+      background: none;
+      border: none;
+      color: #999;
+      cursor: pointer;
+    }
+    
+    .cart-total {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin: 2rem 0;
+    }
+    
+    .checkout-btn {
+      width: 100%;
+    }
+    
+    footer {
+      background-color: var(--dark);
+      color: white;
+      padding: 3rem 5%;
+    }
+    
+    .footer-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+    
+    .footer-section h3 {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .footer-section h3::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 0;
+      width: 30px;
+      height: 3px;
+      background-color: var(--primary);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 0.8rem;
+    }
+    
+    .footer-links a {
+      color: #ddd;
+      text-decoration: none;
+      transition: color 0.3s;
+    }
+    
+    .footer-links a:hover {
+      color: var(--primary);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1rem;
+    }
+    
+    .social-links a {
+      display: inline-block;
+      width: 40px;
+      height: 40px;
+      background-color: #444;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: white;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+    
+    .social-links a:hover {
+      background-color: var(--primary);
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #444;
+    }
+    
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .about {
+        grid-template-columns: 1fr;
+      }
+      
+      .cart-modal {
+        width: 100%;
+        right: -100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <a href="#" class="logo">FRINGE</a>
+      <ul class="nav-links">
+        <li><a href="#gallery">Gallery</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#artists">Artists</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li class="cart-icon" id="cart-icon">
+          <span>🛒</span>
+          <span class="cart-count" id="cart-count">0</span>
+        </li>
+      </ul>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>Redefining Boundaries Through Feminist Abstract Art</h1>
+    <p>Explore bold expressions that challenge conventions and celebrate the feminine perspective in abstract avant-garde.</p>
+    <a href="#gallery" class="btn">Explore Gallery</a>
+  </section>
+
+  <main>
+    <section id="gallery">
+      <h2 class="section-title">Featured Works</h2>
+      <div class="gallery" id="art-gallery">
+        <!-- Art items will be dynamically added here -->
+      </div>
+    </section>
+
+    <section id="about" class="about">
+      <div class="about-img"></div>
+      <div class="about-text">
+        <h2>Our Vision</h2>
+        <p>FRINGE emerged from a collective desire to create space for feminist abstract avant-garde art that challenges patriarchal norms in the art world. Our gallery celebrates works that deconstruct traditional representations and explore new visual languages.</p>
+        <p>We believe that abstract art offers powerful opportunities for feminist expression—allowing artists to move beyond objectification and representational constraints to reveal deeper truths about lived experiences.</p>
+        <p>Each piece in our collection represents a radical reimagining of form, color, and composition that centers marginalized perspectives and pushes against established artistic boundaries.</p>
+      </div>
+    </section>
+
+    <section id="artists">
+      <h2 class="section-title">Featured Artists</h2>
+      <div class="gallery">
+        <div class="art-item">
+          <div class="art-img" style="background-image: url('/api/placeholder/300/300');"></div>
+          <div class="art-info">
+            <h3 class="art-title">Maya Rivero</h3>
+            <p>Drawing from her experiences across cultures, Maya creates vibrant abstractions that explore identity and belonging through geometric patterns and bold color contrasts.</p>
+          </div>
+        </div>
+        <div class="art-item">
+          <div class="art-img" style="background-image: url('/api/placeholder/301/300');"></div>
+          <div class="art-info">
+            <h3 class="art-title">Jin-Soo Park</h3>
+            <p>Jin-Soo's work examines the intersection of gender, technology, and nature through experimental mixed media and unconventional materials.</p>
+          </div>
+        </div>
+        <div class="art-item">
+          <div class="art-img" style="background-image: url('/api/placeholder/302/300');"></div>
+          <div class="art-info">
+            <h3 class="art-title">Lucia Mendez</h3>
+            <p>Lucia creates immersive abstract environments that challenge spatial perception while addressing themes of marginalization and resistance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" style="margin-top: 5rem; text-align: center;">
+      <h2 class="section-title">Join Our Community</h2>
+      <p style="max-width: 600px; margin: 0 auto 2rem;">Subscribe to our newsletter for exhibition announcements, artist features, and special events.</p>
+      <form style="max-width: 500px; margin: 0 auto;">
+        <input type="email" placeholder="Your email address" style="width: 70%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 50px 0 0 50px; outline: none;">
+        <button type="submit" class="btn" style="border-radius: 0 50px 50px 0; margin-left: -5px;">Subscribe</button>
+      </form>
+    </section>
+  </main>
+
+  <div class="cart-modal" id="cart-modal">
+    <button class="close-cart" id="close-cart">✕</button>
+    <h2>Your Cart</h2>
+    <div class="cart-items" id="cart-items">
+      <!-- Cart items will be added here -->
+    </div>
+    <div class="cart-total" id="cart-total">Total: $0</div>
+    <button class="btn checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-section">
+        <h3>FRINGE</h3>
+        <p>A gallery dedicated to feminist abstract avant-garde art, challenging boundaries and celebrating diverse artistic voices.</p>
+      </div>
+      <div class="footer-section">
+        <h3>Links</h3>
+        <ul class="footer-links">
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#about">About Us</a></li>
+          <li><a href="#artists">Artists</a></li>
+          <li><a href="#">Exhibitions</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-section">
+        <h3>Visit Us</h3>
+        <p>123 Art District Way<br>
+        New York, NY 10001<br>
+        Wed-Sun: 11am - 6pm</p>
+      </div>
+      <div class="footer-section">
+        <h3>Connect</h3>
+        <div class="social-links">
+          <a href="#">In</a>
+          <a href="#">Fb</a>
+          <a href="#">Ig</a>
+          <a href="#">Tw</a>
+        </div>
+      </div>
+    </div>
+    <div class="copyright">
+      <p>&copy; 2025 FRINGE Gallery. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Sample art data
+    const artworks = [
+      {
+        id: 1,
+        title: "Fractured Boundaries",
+        artist: "Maya Rivero",
+        price: 1800,
+        image: "/api/placeholder/400/300"
+      },
+      {
+        id: 2,
+        title: "Digital Erosion #7",
+        artist: "Jin-Soo Park",
+        price: 2200,
+        image: "/api/placeholder/401/300"
+      },
+      {
+        id: 3,
+        title: "Maternal Landscapes",
+        artist: "Lucia Mendez",
+        price: 1950,
+        image: "/api/placeholder/402/300"
+      },
+      {
+        id: 4,
+        title: "Encoded Resistance",
+        artist: "Amara Johnson",
+        price: 2400,
+        image: "/api/placeholder/403/300"
+      },
+      {
+        id: 5,
+        title: "Spectral Divide",
+        artist: "Elena Kazan",
+        price: 1700,
+        image: "/api/placeholder/404/300"
+      },
+      {
+        id: 6,
+        title: "Untethered Forms",
+        artist: "Zara Ahmed",
+        price: 2100,
+        image: "/api/placeholder/405/300"
+      }
+    ];
+
+    // Initialize cart
+    let cart = [];
+    
+    // DOM elements
+    const galleryEl = document.getElementById('art-gallery');
+    const cartIcon = document.getElementById('cart-icon');
+    const cartModal = document.getElementById('cart-modal');
+    const closeCart = document.getElementById('close-cart');
+    const cartItemsEl = document.getElementById('cart-items');
+    const cartCountEl = document.getElementById('cart-count');
+    const cartTotalEl = document.getElementById('cart-total');
+    const checkoutBtn = document.getElementById('checkout-btn');
+    
+    // Display artworks in the gallery
+    function renderGallery() {
+      artworks.forEach(art => {
+        const artItem = document.createElement('div');
+        artItem.className = 'art-item';
+        artItem.innerHTML = `
+          <div class="art-img" style="background-image: url('${art.image}');"></div>
+          <div class="art-info">
+            <h3 class="art-title">${art.title}</h3>
+            <p class="artist">by ${art.artist}</p>
+            <p class="price">$${art.price}</p>
+            <button class="btn add-to-cart" data-id="${art.id}">Add to Cart</button>
+          </div>
+        `;
+        galleryEl.appendChild(artItem);
+      });
+    }
+    
+    // Add to cart functionality
+    function setupCartFunctionality() {
+      // Add event listeners to "Add to Cart" buttons
+      document.querySelectorAll('.add-to-cart').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const id = parseInt(e.target.getAttribute('data-id'));
+          addToCart(id);
+        });
+      });
+      
+      // Toggle cart modal
+      cartIcon.addEventListener('click', () => {
+        cartModal.classList.add('open');
+      });
+      
+      closeCart.addEventListener('click', () => {
+        cartModal.classList.remove('open');
+      });
+      
+      // Checkout button
+      checkoutBtn.addEventListener('click', () => {
+        if (cart.length === 0) {
+          alert('Your cart is empty!');
+          return;
+        }
+        
+        alert('Proceeding to checkout...');
+        // Here you would normally redirect to a checkout page
+      });
+    }
+    
+    // Add item to cart
+    function addToCart(id) {
+      const artwork = artworks.find(art => art.id === id);
+      
+      // Check if the item is already in the cart
+      const existingItem = cart.find(item => item.id === id);
+      
+      if (existingItem) {
+        existingItem.quantity += 1;
+      } else {
+        cart.push({...artwork, quantity: 1});
+      }
+      
+      updateCart();
+      cartModal.classList.add('open');
+    }
+    
+    // Remove item from cart
+    function removeFromCart(id) {
+      cart = cart.filter(item => item.id !== id);
+      updateCart();
+    }
+    
+    // Update cart display
+    function updateCart() {
+      // Update cart items
+      cartItemsEl.innerHTML = '';
+      
+      if (cart.length === 0) {
+        cartItemsEl.innerHTML = '<p>Your cart is empty</p>';
+      } else {
+        cart.forEach(item => {
+          const cartItem = document.createElement('div');
+          cartItem.className = 'cart-item';
+          cartItem.innerHTML = `
+            <div class="cart-item-img" style="background-image: url('${item.image}');"></div>
+            <div class="cart-item-info">
+              <h4 class="cart-item-title">${item.title}</h4>
+              <p>by ${item.artist}</p>
+              <p class="cart-item-price">$${item.price} × ${item.quantity}</p>
+              <button class="remove-item" data-id="${item.id}">Remove</button>
+            </div>
+          `;
+          cartItemsEl.appendChild(cartItem);
+        });
+      }
+      
+      // Add event listeners to remove buttons
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', (e) => {
+          const id = parseInt(e.target.getAttribute('data-id'));
+          removeFromCart(id);
+        });
+      });
+      
+      // Update cart count
+      const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+      cartCountEl.textContent = totalItems;
+      
+      // Update cart total
+      const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+      cartTotalEl.textContent = `Total: $${totalPrice}`;
+    }
+    
+    // Initialize
+    window.addEventListener('DOMContentLoaded', () => {
+      renderGallery();
+      setupCartFunctionality();
+      updateCart();
+    });
+  </script>
+</body>
+</html>
